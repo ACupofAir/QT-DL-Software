@@ -18,7 +18,7 @@ python main.py
 
 ### Result
 
-![result](res/res_img.png)
+![result](/res/res_img.png)
 
 ## File Introduction
 
