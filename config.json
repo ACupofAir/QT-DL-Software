@@ -1,0 +1,12 @@
+{
+ "name": "chat_bot",
+ "version": "1.0.0",
+ "dependencies": {},
+ "background_gif_url": "./images/ubuntu20.04.jpg",
+ "language": "Chinese",
+ "batch_size": 64,
+ "learning_rate": 0.0001,
+ "epochs": 1000,
+ "ssl_model_path": "C:/Users/Diankun/OneDrive/\u8bfe\u9898\u7ec4/Cola_Software_Build_merge/Model/0723_ds/0723_ds.h5",
+ "experiment_id": "0723_ds_2"
+}
