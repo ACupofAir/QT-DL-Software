@@ -4,7 +4,7 @@ import json
 # from PyQt5.QtGui import QTextDocumentFragment
 from PyQt5.QtWidgets import *
 from ui import ColaSoftwareUi
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QProcess
 from PyQt5.Qt import QTextCursor
 import matplotlib.pyplot as plt
 from generate_sup_and_predict_data import *
@@ -40,6 +40,9 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.predict_result_x_bar = None
         self.predict_result_right_number_bar = None
         self.predict_result_total_number_bar = None
+
+        # init transfer learning process
+        self.transfer_train_process = QProcess()
 
         self.model = SupervisedModule()
         self.model.train_plot_callback.on_epoch_end_signal.connect(
@@ -92,7 +95,8 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         )
 
         self.buttonPreprocessData.clicked.connect(self.preprocess_data)
-        self.buttonStartTrain.clicked.connect(self.start_ds_train)
+        # self.buttonStartTrain.clicked.connect(self.start_ds_train)
+        self.buttonStartTrain.clicked.connect(self.show_train_options)
         self.button_close.clicked.connect(self.close)
         self.buttonPredictTrainData.clicked.connect(self.start_predict_train_data)
         self.buttonPredictTestData.clicked.connect(self.start_predict_test_data)
@@ -223,6 +227,34 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         plt.clf()
         self.predicting_set_button_disabled(True)
 
+    def show_train_options(self):
+        # Create a new dialog window
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Select Training Option")
+
+        # Create layout
+        layout = QVBoxLayout()
+
+        # Create buttons
+        cola_button = QPushButton("Cola", dialog)
+        transfer_learning_button = QPushButton("迁移学习", dialog)
+
+        # Connect buttons to functions
+        cola_button.clicked.connect(lambda: [dialog.close(), self.start_ds_train()])
+        transfer_learning_button.clicked.connect(
+            lambda: [dialog.close(), self.start_tl_train()]
+        )
+
+        # Add buttons to layout
+        layout.addWidget(cola_button)
+        layout.addWidget(transfer_learning_button)
+
+        # Set layout to dialog
+        dialog.setLayout(layout)
+
+        # Show dialog
+        dialog.exec_()
+
     def start_ds_train(self):
         if self.is_training is False:
             if self.line_edit_experiment_id.text() == "":
@@ -272,6 +304,15 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             self.is_training = False
             self.model.train_plot_callback.accept_stop_training_sign(True)
             self.buttonStartTrain.setText("训练模型")
+
+    def start_tl_train(self):
+        print("======================DEBUG START: start tl======================")
+        print("======================DEBUG  END : start tl======================")
+        cmd = (
+            r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
+            r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
+        )
+        self.transfer_train_process.start(cmd)
 
     def delete_last_line_of_textedit(self):
         test_cursor = self.chatsQTextEdit.textCursor()
