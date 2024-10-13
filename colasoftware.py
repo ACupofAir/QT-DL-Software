@@ -26,9 +26,11 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.change_language("Chinese")
 
         self.preprocess_data_obj = PreprocessDataClass(self.pool)
-        self.preprocess_data_obj.signal_preprocess_data.connect(self.get_sub_process_print_info)
+        self.preprocess_data_obj.signal_preprocess_data.connect(
+            self.get_sub_process_print_info
+        )
 
-        self.train_dir = ''
+        self.train_dir = ""
         self.is_training = False
         self.canvas_loss.draw()
 
@@ -40,28 +42,54 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.predict_result_total_number_bar = None
 
         self.model = SupervisedModule()
-        self.model.train_plot_callback.on_epoch_end_signal.connect(self.get_epoch_end_info)
-        self.model.train_plot_callback.on_batch_end_signal.connect(self.get_batch_end_info)
-        self.model.train_plot_callback.on_test_batch_end_signal.connect(self.get_test_batch_end_info)
-        self.model.train_plot_callback.on_train_end_signal.connect(self.get_train_end_info)
+        self.model.train_plot_callback.on_epoch_end_signal.connect(
+            self.get_epoch_end_info
+        )
+        self.model.train_plot_callback.on_batch_end_signal.connect(
+            self.get_batch_end_info
+        )
+        self.model.train_plot_callback.on_test_batch_end_signal.connect(
+            self.get_test_batch_end_info
+        )
+        self.model.train_plot_callback.on_train_end_signal.connect(
+            self.get_train_end_info
+        )
 
-        self.model.train_plot_callback.on_epoch_begin_signal.connect(self.get_epoch_begin_info)
+        self.model.train_plot_callback.on_epoch_begin_signal.connect(
+            self.get_epoch_begin_info
+        )
 
         self.model.train_info_signal.connect(self.get_sub_process_print_info)
 
         self.predict_train_data_obj = PredictTrainValidationData()
-        self.predict_train_data_obj.signal_predict_data_info.connect(self.get_sub_process_print_info)
-        self.predict_train_data_obj.signal_predict_result.connect(self.get_predict_result)
-        self.predict_train_data_obj.signal_predict_class_info.connect(self.get_predict_class_info)
+        self.predict_train_data_obj.signal_predict_data_info.connect(
+            self.get_sub_process_print_info
+        )
+        self.predict_train_data_obj.signal_predict_result.connect(
+            self.get_predict_result
+        )
+        self.predict_train_data_obj.signal_predict_class_info.connect(
+            self.get_predict_class_info
+        )
 
         self.predict_test_data_obj = PredictTestData()
-        self.predict_test_data_obj.signal_predict_data_info.connect(self.get_sub_process_print_info)
-        self.predict_test_data_obj.signal_predict_result.connect(self.get_predict_result)
-        self.predict_test_data_obj.signal_predict_class_info.connect(self.get_predict_class_info)
+        self.predict_test_data_obj.signal_predict_data_info.connect(
+            self.get_sub_process_print_info
+        )
+        self.predict_test_data_obj.signal_predict_result.connect(
+            self.get_predict_result
+        )
+        self.predict_test_data_obj.signal_predict_class_info.connect(
+            self.get_predict_class_info
+        )
 
         self.predict_unknown_data_obj = PredictUnknownData()
-        self.predict_unknown_data_obj.signal_predict_data_info.connect(self.get_sub_process_print_info)
-        self.predict_unknown_data_obj.signal_predict_result.connect(self.get_predict_unknown_result)
+        self.predict_unknown_data_obj.signal_predict_data_info.connect(
+            self.get_sub_process_print_info
+        )
+        self.predict_unknown_data_obj.signal_predict_result.connect(
+            self.get_predict_unknown_result
+        )
 
         self.buttonPreprocessData.clicked.connect(self.preprocess_data)
         self.buttonStartTrain.clicked.connect(self.start_ds_train)
@@ -74,8 +102,6 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         # self.combox_select_model.activated[str].connect(self.select_model)
         # self.chatsQTextEdit.append(self.combox_select_model.currentText())
 
-
-
         self.show_training_every_epochs = 2
         self.show_training_every_epochs_current_numbers = 0
         self.show_test_every_epochs_current_numbers = 0
@@ -86,8 +112,10 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
     #     self.chatsQTextEdit.append(model_type)
 
     def change_model_path(self):
-        dialog_title = "Select model file" if self.language == "English" else "选择模型文件"
-        model_path, _ = QFileDialog.getOpenFileName(self, dialog_title, directory='.')
+        dialog_title = (
+            "Select model file" if self.language == "English" else "选择模型文件"
+        )
+        model_path, _ = QFileDialog.getOpenFileName(self, dialog_title, directory=".")
         if model_path == "":
             return
         print(model_path)
@@ -106,9 +134,15 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             return
 
         self.predict_online_data_obj = PredictOnlineData()
-        self.predict_online_data_obj.signal_predict_data_info.connect(self.get_sub_process_print_info)
-        self.predict_online_data_obj.signal_predict_result.connect(self.get_predict_unknown_result)
-        self.predict_online_data_obj.signal_predict_result.connect(self.get_predict_unknown_result)
+        self.predict_online_data_obj.signal_predict_data_info.connect(
+            self.get_sub_process_print_info
+        )
+        self.predict_online_data_obj.signal_predict_result.connect(
+            self.get_predict_unknown_result
+        )
+        self.predict_online_data_obj.signal_predict_result.connect(
+            self.get_predict_unknown_result
+        )
         self.predict_online_data_obj.accept_signal_model_path(self.ssl_model_path)
 
         self.predict_online_data_obj.start()
@@ -119,8 +153,10 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             self.chatsQTextEdit.append("Error: Please check model path.")
             return
 
-        dialog_title = "Select test file" if self.language == "English" else "选择测试文件"
-        test_file, _ = QFileDialog.getOpenFileName(self, dialog_title, directory='.')
+        dialog_title = (
+            "Select test file" if self.language == "English" else "选择测试文件"
+        )
+        test_file, _ = QFileDialog.getOpenFileName(self, dialog_title, directory=".")
         if test_file == "":
             return
 
@@ -135,10 +171,14 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.predict_result_right_number_bar.append(0)
 
     def get_data_folder_path(self):
-        dialog_title = "Select test folder" if self.language == "English" else "选择验证文件夹"
-        data_folder_url = QFileDialog.getExistingDirectory(self, dialog_title, directory='.')
+        dialog_title = (
+            "Select test folder" if self.language == "English" else "选择验证文件夹"
+        )
+        data_folder_url = QFileDialog.getExistingDirectory(
+            self, dialog_title, directory="."
+        )
         print(f"***{data_folder_url}---")
-        if data_folder_url == '':
+        if data_folder_url == "":
             return None
 
         self.total_class_number = len(os.listdir(data_folder_url))
@@ -189,10 +229,16 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
                 self.get_sub_process_print_info("Experiment id cannot be empty!")
                 return
 
-            dialog_title = "Select train folder" if self.language == "English" else "选择训练文件夹"
-            train_folder_url = QFileDialog.getExistingDirectory(self, dialog_title, directory='.')
+            dialog_title = (
+                "Select train folder"
+                if self.language == "English"
+                else "选择训练文件夹"
+            )
+            train_folder_url = QFileDialog.getExistingDirectory(
+                self, dialog_title, directory="."
+            )
 
-            if train_folder_url == '':
+            if train_folder_url == "":
                 return
             if "32768" not in os.listdir(train_folder_url):
                 self.get_sub_process_print_info("请检查目录结构！ 32768/ssl_train/")
@@ -211,7 +257,9 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             self.model.set_learning_rate(self.learning_rate)
             self.model.set_experiment_id(self.line_edit_experiment_id.text())
             self.model.set_model_type(self.combox_select_model.currentText())
-            self.chatsQTextEdit.append("Info use model: " + self.combox_select_model.currentText())
+            self.chatsQTextEdit.append(
+                "Info use model: " + self.combox_select_model.currentText()
+            )
             self.line_edit_learning_rate.setDisabled(True)
 
             self.model.start()
@@ -227,9 +275,15 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
 
     def delete_last_line_of_textedit(self):
         test_cursor = self.chatsQTextEdit.textCursor()
-        test_cursor.movePosition(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
-        test_cursor.movePosition(QTextCursor.MoveOperation.Up, QTextCursor.MoveMode.KeepAnchor)
-        test_cursor.movePosition(QTextCursor.MoveOperation.EndOfLine, QTextCursor.MoveMode.KeepAnchor)
+        test_cursor.movePosition(
+            QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor
+        )
+        test_cursor.movePosition(
+            QTextCursor.MoveOperation.Up, QTextCursor.MoveMode.KeepAnchor
+        )
+        test_cursor.movePosition(
+            QTextCursor.MoveOperation.EndOfLine, QTextCursor.MoveMode.KeepAnchor
+        )
         # test_cursor.selection().toPlainText()
         test_cursor.deleteChar()
         self.chatsQTextEdit.setTextCursor(test_cursor)
@@ -240,10 +294,12 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         show_text = f"Epoch {epoch}, "
         keys = list(logs.keys())
         for i, key in enumerate(keys):
-            if 'lr' in key:
+            if "lr" in key:
                 self.line_edit_learning_rate.setText(str(logs[key]))
                 continue
-            show_text += key.replace("sparse_categorical_", "") + ' ' + '%.4f' % logs[key] + ', '
+            show_text += (
+                key.replace("sparse_categorical_", "") + " " + "%.4f" % logs[key] + ", "
+            )
             if float(logs[key]) > 5:
                 self.chatsQTextEdit.append(show_text)
                 return
@@ -252,16 +308,20 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.plot_x_data.append(len(self.plot_x_data))
         show_text = f"Epoch {epoch}, "
         for i, key in enumerate(keys):
-            if 'lr' in key:
+            if "lr" in key:
                 continue
-            show_text += key.replace("sparse_categorical_", "") + ' ' + '%.4f' % logs[key] + ', '
+            show_text += (
+                key.replace("sparse_categorical_", "") + " " + "%.4f" % logs[key] + ", "
+            )
             self.epoch_metric[i].append(logs[key])
 
         plt.clf()
-        plt.rcParams.update({
-            # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
-            "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
-        })
+        plt.rcParams.update(
+            {
+                # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
+                "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
+            }
+        )
 
         max_losses = max(max(self.epoch_metric[0]), max(self.epoch_metric[2]))
         self.figure_loss = plt.figure(dpi=100, figsize=(8, 3.2), num=1)
@@ -295,18 +355,27 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.chatsQTextEdit.append(show_text)
 
     def get_epoch_begin_info(self):
-        self.chatsQTextEdit.append('-')
+        self.chatsQTextEdit.append("-")
 
     def get_batch_end_info(self):
-        if self.show_training_every_epochs_current_numbers % self.show_training_every_epochs == 1:
-            self.chatsQTextEdit.insertPlainText('-')
+        if (
+            self.show_training_every_epochs_current_numbers
+            % self.show_training_every_epochs
+            == 1
+        ):
+            self.chatsQTextEdit.insertPlainText("-")
         self.show_training_every_epochs_current_numbers += 1
         # print(self.show_training_every_epochs_current_numbers, self.show_training_every_epochs)
 
     def get_test_batch_end_info(self):
-        if self.show_test_every_epochs_current_numbers % int(
-                self.show_training_every_epochs * int(self.line_edit_batch_size.text())) == 1:
-            self.chatsQTextEdit.insertPlainText('-')
+        if (
+            self.show_test_every_epochs_current_numbers
+            % int(
+                self.show_training_every_epochs * int(self.line_edit_batch_size.text())
+            )
+            == 1
+        ):
+            self.chatsQTextEdit.insertPlainText("-")
         self.show_test_every_epochs_current_numbers += 1
 
     def get_predict_result(self, right_number):
@@ -314,22 +383,34 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
 
         # Number
         plt.clf()
-        plt.rcParams.update({
-            # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
-            "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
-        })
+        plt.rcParams.update(
+            {
+                # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
+                "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
+            }
+        )
 
         self.figure_loss = plt.figure(dpi=100, figsize=(8, 3.2), num=1)
-        plt.grid(b=True, axis='y')
+        plt.grid(b=True, axis="y")
         plt.ylabel("数量/个")
         plt.xlabel("类别")
         if self.total_class_number < 6:
             plt.xlim(-1, 6)
 
-        plt.bar(self.predict_result_x_bar, self.predict_result_right_number_bar, label='Right number',
-                color='green', alpha=1)
-        plt.bar(self.predict_result_x_bar, self.predict_result_total_number_bar, label='Total number', color='red',
-                alpha=0.2)
+        plt.bar(
+            self.predict_result_x_bar,
+            self.predict_result_right_number_bar,
+            label="Right number",
+            color="green",
+            alpha=1,
+        )
+        plt.bar(
+            self.predict_result_x_bar,
+            self.predict_result_total_number_bar,
+            label="Total number",
+            color="red",
+            alpha=0.2,
+        )
 
         plt.legend()
         self.canvas_loss.draw()
@@ -340,13 +421,18 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         if self.total_class_number < 6:
             plt.xlim(-1, 6)
 
-        plt.grid(b=True, axis='y')
+        plt.grid(b=True, axis="y")
         plt.ylim(0, 101)
         plt.ylabel("正确百分比/%")
         plt.xlabel("类别")
-        plt.bar(self.predict_result_x_bar,
-                np.array(self.predict_result_right_number_bar) / np.array(self.predict_result_total_number_bar) * 100,
-                label='Right percent', alpha=0.9)
+        plt.bar(
+            self.predict_result_x_bar,
+            np.array(self.predict_result_right_number_bar)
+            / np.array(self.predict_result_total_number_bar)
+            * 100,
+            label="Right percent",
+            alpha=0.9,
+        )
 
         plt.legend()
         self.canvas_accuracy.draw()
@@ -356,18 +442,20 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         # Number
         plt.clf()
         self.figure_loss = plt.figure(dpi=100, figsize=(8, 3.2), num=1)
-        plt.grid(b=True, axis='y')
-        plt.rcParams.update({
-            # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
-            "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
-        })
+        plt.grid(b=True, axis="y")
+        plt.rcParams.update(
+            {
+                # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
+                "axes.facecolor": (1, 1, 1, 0.6),  # green with alpha = 50%
+            }
+        )
 
         if len(result) < 6:
             plt.xlim(-1, 6)
         plt.ylabel("切片数量/个")
         plt.xlabel("类别")
 
-        plt.bar(list(range(len(result))), result, label='Class slice number')
+        plt.bar(list(range(len(result))), result, label="Class slice number")
 
         plt.legend()
         self.canvas_loss.draw()
@@ -378,26 +466,35 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         if len(result) < 6:
             plt.xlim(-1, 6)
 
-        plt.grid(b=True, axis='y')
+        plt.grid(b=True, axis="y")
         plt.ylim(0, 101)
         plt.ylabel("所占百分比/%")
         plt.xlabel("类别")
 
-        plt.bar(list(range(len(result))), np.array(result) / np.sum(np.array(result)) * 100,
-                label='Class slice percent')
+        plt.bar(
+            list(range(len(result))),
+            np.array(result) / np.sum(np.array(result)) * 100,
+            label="Class slice percent",
+        )
 
         plt.legend()
         self.canvas_accuracy.draw()
 
     def preprocess_data(self):
-        dialog_title = "Select train folder" if self.language == "English" else "选择训练文件夹"
-        gif_file_url = QFileDialog.getExistingDirectory(self, dialog_title, directory='D:/Datasets')
+        dialog_title = (
+            "Select train folder" if self.language == "English" else "选择训练文件夹"
+        )
+        gif_file_url = QFileDialog.getExistingDirectory(
+            self, dialog_title, directory="D:/Datasets"
+        )
 
-        if gif_file_url == '' or gif_file_url is None:
+        if gif_file_url == "" or gif_file_url is None:
             return
         # gif_file_url = "D:/Datasets/7_3_test_22050_train_npy_hop_10"
         self.chatsQTextEdit.setText(gif_file_url)
-        self.train_dir = os.path.join(gif_file_url + '_train_npy_hop_' + str(constants.hop_len_for_ds_data))
+        self.train_dir = os.path.join(
+            gif_file_url + "_train_npy_hop_" + str(constants.hop_len_for_ds_data)
+        )
         if not os.path.exists(self.train_dir):
             os.mkdir(self.train_dir)
             os.mkdir(os.path.join(self.train_dir, "32768"))
@@ -409,13 +506,12 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.preprocess_data_obj.start()
         self.predicting_set_button_disabled(True)
 
-
     def get_sub_process_print_info(self, info_text):
         if info_text == "Stop training!":
             self.is_training = False
 
         if "IMPORTANT" in info_text:
-            self.steps_per_epoch = int(info_text.split(' ')[1].split('=')[1])
+            self.steps_per_epoch = int(info_text.split(" ")[1].split("=")[1])
             self.show_training_every_epochs = (self.steps_per_epoch * 1.25) // 40
             if self.show_training_every_epochs <= 1:
                 self.show_training_every_epochs = 2
