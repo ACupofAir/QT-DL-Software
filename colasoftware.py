@@ -94,7 +94,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             self.get_predict_unknown_result
         )
 
-        self.buttonPreprocessData.clicked.connect(self.preprocess_data)
+        self.buttonPreprocessData.clicked.connect(self.show_preprocess_options)
         # self.buttonStartTrain.clicked.connect(self.start_ds_train)
         self.buttonStartTrain.clicked.connect(self.show_train_options)
         self.button_close.clicked.connect(self.close)
@@ -306,11 +306,16 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             self.buttonStartTrain.setText("训练模型")
 
     def start_tl_train(self):
-        print("======================DEBUG START: start tl======================")
-        print("======================DEBUG  END : start tl======================")
         cmd = (
             r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
             r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
+        )
+        self.transfer_train_process.start(cmd)
+
+    def start_audio_enhance(self):
+        cmd = (
+            r"C:/Users/june/scoop/apps/miniconda3/current/envs/hardware_cola/python.exe "
+            r"c:/Users/june/Workspace/Asteroid/code/inference_ui.py"
         )
         self.transfer_train_process.start(cmd)
 
@@ -520,6 +525,36 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
 
         plt.legend()
         self.canvas_accuracy.draw()
+
+    def show_preprocess_options(self):
+        # Create a new dialog window
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Select Preprocess Option")
+
+        # Create layout
+        layout = QVBoxLayout()
+
+        # Create buttons
+        denoise_btn = QPushButton("降噪", dialog)
+        org_preprocess_btn = QPushButton("原始预处理", dialog)
+
+        # Connect buttons to functions
+        denoise_btn.clicked.connect(
+            lambda: [dialog.close(), self.start_audio_enhance()]
+        )
+        org_preprocess_btn.clicked.connect(
+            lambda: [dialog.close(), self.preprocess_data()]
+        )
+
+        # Add buttons to layout
+        layout.addWidget(denoise_btn)
+        layout.addWidget(org_preprocess_btn)
+
+        # Set layout to dialog
+        dialog.setLayout(layout)
+
+        # Show dialog
+        dialog.exec_()
 
     def preprocess_data(self):
         dialog_title = (
