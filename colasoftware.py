@@ -13,6 +13,7 @@ from predict_train_validation_data import PredictTrainValidationData
 from predict_single_file import PredictTestData
 from predict_unknown_data import PredictUnknownData
 from predict_online_data import PredictOnlineData
+from util.ui import AirBtn
 import os
 
 
@@ -236,8 +237,19 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         layout = QVBoxLayout()
 
         # Create buttons
-        cola_button = QPushButton("Cola", dialog)
-        transfer_learning_button = QPushButton("迁移学习", dialog)
+        cola_button = AirBtn(
+            text="对比学习",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color="#d4748c",
+        )
+        # cola_button = QPushButton("Cola", dialog)
+        transfer_learning_button = AirBtn(
+            text="迁移学习",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color="#d4748c",
+        )
 
         # Connect buttons to functions
         cola_button.clicked.connect(lambda: [dialog.close(), self.start_ds_train()])
@@ -535,8 +547,18 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         layout = QVBoxLayout()
 
         # Create buttons
-        denoise_btn = QPushButton("降噪", dialog)
-        org_preprocess_btn = QPushButton("原始预处理", dialog)
+        denoise_btn = AirBtn(
+            text="降噪",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color="#a6aaae",
+        )
+        org_preprocess_btn = AirBtn(
+            text="预处理",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color="#a6aaae",
+        )
 
         # Connect buttons to functions
         denoise_btn.clicked.connect(
