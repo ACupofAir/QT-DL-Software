@@ -229,6 +229,11 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.predicting_set_button_disabled(True)
 
     def show_train_options(self):
+        if self.is_training is True:
+            self.is_training = False
+            self.model.train_plot_callback.accept_stop_training_sign(True)
+            self.buttonStartTrain.setText("训练模型")
+
         # Create a new dialog window
         dialog = QDialog(self)
         dialog.setWindowTitle("Select Training Option")
@@ -268,54 +273,46 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         dialog.exec_()
 
     def start_ds_train(self):
-        if self.is_training is False:
-            if self.line_edit_experiment_id.text() == "":
-                self.get_sub_process_print_info("Experiment id cannot be empty!")
-                return
+        if self.line_edit_experiment_id.text() == "":
+            self.get_sub_process_print_info("Experiment id cannot be empty!")
+            return
 
-            dialog_title = (
-                "Select train folder"
-                if self.language == "English"
-                else "选择训练文件夹"
-            )
-            train_folder_url = QFileDialog.getExistingDirectory(
-                self, dialog_title, directory="."
-            )
+        dialog_title = (
+            "Select train folder" if self.language == "English" else "选择训练文件夹"
+        )
+        train_folder_url = QFileDialog.getExistingDirectory(
+            self, dialog_title, directory="."
+        )
 
-            if train_folder_url == "":
-                return
-            if "32768" not in os.listdir(train_folder_url):
-                self.get_sub_process_print_info("请检查目录结构！ 32768/ssl_train/")
-                return
+        if train_folder_url == "":
+            return
+        if "32768" not in os.listdir(train_folder_url):
+            self.get_sub_process_print_info("请检查目录结构！ 32768/ssl_train/")
+            return
 
-            self.buttonStartTrain.setText("停止训练模型")
-            self.is_training = True
+        self.buttonStartTrain.setText("停止训练模型")
+        self.is_training = True
 
-            self.chatsQTextEdit.append(f"Train folder is {train_folder_url}")
-            self.chatsQTextEdit.append(f"Start Training")
+        self.chatsQTextEdit.append(f"Train folder is {train_folder_url}")
+        self.chatsQTextEdit.append(f"Start Training")
 
-            self.model.set_train_dir(train_folder_url)
-            self.model.set_batch_size(int(self.line_edit_batch_size.text()))
-            self.model.set_epochs(int(self.line_edit_epoch.text()))
-            self.learning_rate = float(self.line_edit_learning_rate.text())
-            self.model.set_learning_rate(self.learning_rate)
-            self.model.set_experiment_id(self.line_edit_experiment_id.text())
-            self.model.set_model_type(self.combox_select_model.currentText())
-            self.chatsQTextEdit.append(
-                "Info use model: " + self.combox_select_model.currentText()
-            )
-            self.line_edit_learning_rate.setDisabled(True)
+        self.model.set_train_dir(train_folder_url)
+        self.model.set_batch_size(int(self.line_edit_batch_size.text()))
+        self.model.set_epochs(int(self.line_edit_epoch.text()))
+        self.learning_rate = float(self.line_edit_learning_rate.text())
+        self.model.set_learning_rate(self.learning_rate)
+        self.model.set_experiment_id(self.line_edit_experiment_id.text())
+        self.model.set_model_type(self.combox_select_model.currentText())
+        self.chatsQTextEdit.append(
+            "Info use model: " + self.combox_select_model.currentText()
+        )
+        self.line_edit_learning_rate.setDisabled(True)
 
-            self.model.start()
-            plt.clf()
-            self.training_set_button_disabled(True)
-            self.epoch_metric = [[] for _ in range(5)]
-            self.plot_x_data = []
-
-        elif self.is_training is True:
-            self.is_training = False
-            self.model.train_plot_callback.accept_stop_training_sign(True)
-            self.buttonStartTrain.setText("训练模型")
+        self.model.start()
+        plt.clf()
+        self.training_set_button_disabled(True)
+        self.epoch_metric = [[] for _ in range(5)]
+        self.plot_x_data = []
 
     def start_tl_train(self):
         cmd = (
