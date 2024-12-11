@@ -255,16 +255,27 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             fixed_size=(160, 60),
             background_color="#d4748c",
         )
+        # cola_button = QPushButton("Cola", dialog)
+        ast_button = AirBtn(
+            text="AST",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color="#d4748c",
+        )
 
         # Connect buttons to functions
         cola_button.clicked.connect(lambda: [dialog.close(), self.start_ds_train()])
         transfer_learning_button.clicked.connect(
             lambda: [dialog.close(), self.start_tl_train()]
         )
+        ast_button.clicked.connect(
+            lambda: [dialog.close(), self.start_ast_train()]
+        )
 
         # Add buttons to layout
         layout.addWidget(cola_button)
         layout.addWidget(transfer_learning_button)
+        layout.addWidget(ast_button)
 
         # Set layout to dialog
         dialog.setLayout(layout)
@@ -320,6 +331,16 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
             r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
         )
         self.transfer_train_process.start(cmd)
+
+    def start_ast_train(self):
+        print('======================DEBUG START: ast train started======================')
+        # *[JuneNote] todo : change the path to ast path
+        # cmd = (
+        #     r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
+        #     r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
+        # )
+        print('======================DEBUG  END : ast train started======================')
+        # self.transfer_train_process.start(cmd)
 
     def start_audio_enhance(self):
         cmd = (
