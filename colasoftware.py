@@ -101,7 +101,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.button_close.clicked.connect(self.close)
         self.buttonPredictTrainData.clicked.connect(self.start_predict_train_data)
         self.buttonPredictTestData.clicked.connect(self.start_predict_test_data)
-        self.buttonPredictUnknownData.clicked.connect(self.start_predict_unknown_data)
+        self.buttonPredictUnknownData.clicked.connect(self.show_inference_options)
         self.buttonOnlineTest.clicked.connect(self.start_predict_online_data)
         self.button_ssl_model_path.clicked.connect(self.change_model_path)
         # self.combox_select_model.activated[str].connect(self.select_model)
@@ -190,6 +190,86 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
 
         return data_folder_url
 
+    def show_inference_options(self):
+        bg_color = "#ac7fdf"
+
+        # Create a new dialog window
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Select Inference Model")
+
+        # Create layout
+        layout = QVBoxLayout()
+
+        # Create buttons
+        cola_button = AirBtn(
+            text="对比学习",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color=bg_color,
+        )
+        # cola_button = QPushButton("Cola", dialog)
+        transfer_learning_button = AirBtn(
+            text="迁移学习",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color=bg_color,
+        )
+        # cola_button = QPushButton("Cola", dialog)
+        ast_button = AirBtn(
+            text="AST",
+            parent=dialog,
+            fixed_size=(160, 60),
+            background_color=bg_color,
+        )
+
+        # Connect buttons to functions
+        cola_button.clicked.connect(
+            lambda: [dialog.close(), self.start_predict_unknown_data()]
+        )
+        transfer_learning_button.clicked.connect(
+            lambda: [dialog.close(), self.start_tl_inference()]
+        )
+        ast_button.clicked.connect(lambda: [dialog.close(), self.start_ast_inference()])
+
+        # Add buttons to layout
+        layout.addWidget(cola_button)
+        layout.addWidget(transfer_learning_button)
+        layout.addWidget(ast_button)
+
+        # Set layout to dialog
+        dialog.setLayout(layout)
+
+        # Show dialog
+        dialog.exec_()
+
+    def start_tl_inference(self):
+        print(
+            "======================DEBUG START: tl inference started======================"
+        )
+        # *[JuneNote] todo : change the path to tl path
+        # cmd = (
+        #     r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
+        #     r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
+        # )
+        print(
+            "======================DEBUG  END : tl inference started======================"
+        )
+        # self.transfer_train_process.start(cmd)
+
+    def start_ast_inference(self):
+        print(
+            "======================DEBUG START: ast inference started======================"
+        )
+        # *[JuneNote] todo : change the path to ast path
+        # cmd = (
+        #     r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
+        #     r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
+        # )
+        print(
+            "======================DEBUG  END : ast inference started======================"
+        )
+        # self.transfer_train_process.start(cmd)
+
     def start_predict_train_data(self):
         if not os.path.exists(self.ssl_model_path):
             self.chatsQTextEdit.append("Error: Please check model path.")
@@ -268,9 +348,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         transfer_learning_button.clicked.connect(
             lambda: [dialog.close(), self.start_tl_train()]
         )
-        ast_button.clicked.connect(
-            lambda: [dialog.close(), self.start_ast_train()]
-        )
+        ast_button.clicked.connect(lambda: [dialog.close(), self.start_ast_train()])
 
         # Add buttons to layout
         layout.addWidget(cola_button)
@@ -333,13 +411,17 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         self.transfer_train_process.start(cmd)
 
     def start_ast_train(self):
-        print('======================DEBUG START: ast train started======================')
+        print(
+            "======================DEBUG START: ast train started======================"
+        )
         # *[JuneNote] todo : change the path to ast path
         # cmd = (
         #     r"C:/Users/june/scoop/persist/miniconda3/envs/bmt_py38/python.exe "
         #     r"C:/Users/june/Workspace/Bidirectional-matching-cross-transfer/Deit_Cross_Att/train_ui.py"
         # )
-        print('======================DEBUG  END : ast train started======================')
+        print(
+            "======================DEBUG  END : ast train started======================"
+        )
         # self.transfer_train_process.start(cmd)
 
     def start_audio_enhance(self):
