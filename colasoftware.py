@@ -192,6 +192,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
 
     def show_inference_options(self):
         bg_color = "#ac7fdf"
+        bt_size = (160, 60)
 
         # Create a new dialog window
         dialog = QDialog(self)
@@ -204,21 +205,21 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         cola_button = AirBtn(
             text="对比学习",
             parent=dialog,
-            fixed_size=(160, 60),
+            fixed_size=bt_size,
             background_color=bg_color,
         )
         # cola_button = QPushButton("Cola", dialog)
         transfer_learning_button = AirBtn(
             text="迁移学习",
             parent=dialog,
-            fixed_size=(160, 60),
+            fixed_size=bt_size,
             background_color=bg_color,
         )
         # cola_button = QPushButton("Cola", dialog)
         ast_button = AirBtn(
             text="AST",
             parent=dialog,
-            fixed_size=(160, 60),
+            fixed_size=bt_size,
             background_color=bg_color,
         )
 
