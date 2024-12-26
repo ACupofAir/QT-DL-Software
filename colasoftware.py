@@ -217,7 +217,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         )
         # cola_button = QPushButton("Cola", dialog)
         ast_button = AirBtn(
-            text="AST",
+            text="对数比学习",
             parent=dialog,
             fixed_size=bt_size,
             background_color=bg_color,
@@ -338,7 +338,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         )
         # cola_button = QPushButton("Cola", dialog)
         ast_button = AirBtn(
-            text="AST",
+            text="对数比学习",
             parent=dialog,
             fixed_size=(160, 60),
             background_color="#d4748c",
