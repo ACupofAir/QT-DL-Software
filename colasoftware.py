@@ -550,7 +550,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         )
 
         self.figure_loss = plt.figure(dpi=100, figsize=(8, 3.2), num=1)
-        plt.grid(b=True, axis="y")
+        # plt.grid(b=True, axis="y")
         plt.ylabel("数量/个")
         plt.xlabel("类别")
         if self.total_class_number < 6:
@@ -580,7 +580,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         if self.total_class_number < 6:
             plt.xlim(-1, 6)
 
-        plt.grid(b=True, axis="y")
+        # plt.grid(b=True, axis="y")
         plt.ylim(0, 101)
         plt.ylabel("正确百分比/%")
         plt.xlabel("类别")
@@ -601,7 +601,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         # Number
         plt.clf()
         self.figure_loss = plt.figure(dpi=100, figsize=(8, 3.2), num=1)
-        plt.grid(b=True, axis="y")
+        # plt.grid(b=True, axis="y")
         plt.rcParams.update(
             {
                 # "figure.facecolor": (1, 0.0, 0.0, 0.3),  # red   with alpha = 30%
@@ -625,7 +625,7 @@ class ColaSoftware(ColaSoftwareUi, QWidget):
         if len(result) < 6:
             plt.xlim(-1, 6)
 
-        plt.grid(b=True, axis="y")
+        # plt.grid(b=True, axis="y")
         plt.ylim(0, 101)
         plt.ylabel("所占百分比/%")
         plt.xlabel("类别")
